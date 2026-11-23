@@ -1,0 +1,237 @@
+{
+  "info": {
+    "name": "SWRMS API v1 Prototype",
+    "description": "Assignment 2 — REST API Prototype with Mocked Backend, Token RBAC, Validation, and HTML Greeting for Sanitary Ware Retail Management System (SWRMS).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. HTML Greeting Page (200 OK)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/greeting",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "greeting"]
+        }
+      }
+    },
+    {
+      "name": "2. List Products - User A (200 OK)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer user-a-token" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products?page=1&perPage=10",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "products"],
+          "query": [
+            { "key": "page", "value": "1" },
+            { "key": "perPage", "value": "10" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "3. List All Products - Admin (200 OK)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer admin-token" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "products"]
+        }
+      }
+    },
+    {
+      "name": "4. Get Single Product - User A (200 OK)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer user-a-token" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products/prod_101",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "products", "prod_101"]
+        }
+      }
+    },
+    {
+      "name": "5. Create Product - User A (201 Created)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer user-a-token" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Hansgrohe Raindance Showerhead\",\n  \"barcode\": \"4011097732109\",\n  \"category\": \"Showers\",\n  \"purchasePrice\": 140.00,\n  \"salePrice\": 210.00,\n  \"stockQuantity\": 15\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "products"]
+        }
+      }
+    },
+    {
+      "name": "6. Update Product - User A (200 OK)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer user-a-token" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Grohe Eurosmart Basin Mixer V2\",\n  \"barcode\": \"4005176865015\",\n  \"category\": \"Mixers\",\n  \"purchasePrice\": 90.00,\n  \"salePrice\": 135.00,\n  \"stockQuantity\": 25\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products/prod_101",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "products", "prod_101"]
+        }
+      }
+    },
+    {
+      "name": "7. Unauthorized - Missing Token (401)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "products"]
+        }
+      }
+    },
+    {
+      "name": "8. Unauthorized - Invalid Token (401)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer wrong-token-123" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "products"]
+        }
+      }
+    },
+    {
+      "name": "9. Forbidden - User A accessing User B Product (403)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer user-a-token" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products/prod_103",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "products", "prod_103"]
+        }
+      }
+    },
+    {
+      "name": "10. Validation Error - Invalid Body (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer user-a-token" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"AB\",\n  \"stockQuantity\": -5,\n  \"unknownField\": \"invalid\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "products"]
+        }
+      }
+    },
+    {
+      "name": "11. Not Found - Non-existent ID (404)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer user-a-token" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products/prod_9999",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "products", "prod_9999"]
+        }
+      }
+    },
+    {
+      "name": "12. Conflict - Duplicate Barcode (409)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer user-a-token" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Duplicate Mixer\",\n  \"barcode\": \"4005176865015\",\n  \"category\": \"Mixers\",\n  \"purchasePrice\": 50.00,\n  \"salePrice\": 80.00,\n  \"stockQuantity\": 5\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "products"]
+        }
+      }
+    },
+    {
+      "name": "13. Delete Product - Admin (200 OK)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Authorization", "value": "Bearer admin-token" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products/prod_104",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "products", "prod_104"]
+        }
+      }
+    }
+  ]
+}
